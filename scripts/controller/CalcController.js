@@ -237,9 +237,6 @@ class CalcController {
 
             this._lastNumber = this.getCalcResult();
 
-            console.log(this._lastNumber);
-            console.log(this._lastOperator);
-
         } else if (this._operation.length == 3) {
 
             this._lastNumber = this.getLastItem(false);
@@ -266,15 +263,12 @@ class CalcController {
 
     addOperator(value) {
 
-        console.log(isNaN(value));
-
         if (isNaN(this.getLastOperator())) {
             if (this.isOperator(value)) {
                 if (this.getLastOperator()) {
                     this.replaceLastIndex(value);
                 }
             } else if (isNaN(value)) {
-                console.log(value);
             } else {
                 this.pushOperator(value);
                 this.showLastNumberOnDisplay();
@@ -283,7 +277,6 @@ class CalcController {
             if (this.isOperator(value)) {
                 this.pushOperator(value);
             } else if (isNaN(value)) {
-                console.log(value)
             } else {
                 let newValue = `${this.getLastOperator().toString()}${value.toString()}`;
                 this.replaceLastIndex(newValue);
