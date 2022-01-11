@@ -2,7 +2,7 @@ class CalcController {
 
     constructor() {
 
-
+        this._audioOnOff = false;
         this._lastNumber;
         this._lastOperator;
         this._operation = [];
@@ -12,11 +12,14 @@ class CalcController {
         this._timeEl = document.querySelector('#hora');
         this._currentDate;
         this.initialize();
-        this.initButtonsEvents();
         
     }
     
     initialize() {
+
+        this.initButtonsEvents();
+
+        this.initKeyboardEvents();
         
         this.setDisplayTimeAndDate();
         
@@ -34,6 +37,12 @@ class CalcController {
             day: '2-digit', month: 'long', year: 'numeric'
         });
         this.displayTime = this.currentDate.toLocaleTimeString(this.locale);
+
+    }
+
+    initKeyboardEvents() {
+        
+        document.addEventListener('keyup', this.execKeyboard);
 
     }
     
@@ -62,6 +71,70 @@ class CalcController {
             button.addEventListener(event, fn, false);
         });
 
+    }
+
+    execKeyboard(e) {
+
+        const key = e.key;
+
+        const _this = calculator;
+
+        switch (key) {
+            
+            case 'Escape':
+                    _this.clearAll();
+                    break;
+    
+                case 'Backspace':
+                    _this.clearEntry();
+                    break;
+    
+                case '+':    
+                case '-':    
+                case '*':    
+                case '/':    
+                case '%':
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    _this.addOperator(key);
+                    break;
+    
+                case 'Enter':
+                case '=':
+                    _this.calc();
+                    break;
+    
+                case '.':
+                case ',':
+                    _this.addDot();
+                    break;
+
+        }
+
+    }
+
+    addDot() {
+
+        let lastItem = this.getLastOperator();
+
+        if (!(lastItem.indexOf('.') > -1)) {
+
+            if (this.isOperator(lastItem) || lastItem === undefined) {
+                this._operation.push('0.');
+            } else {
+                this.replaceLastIndex(`${lastItem}.`);
+            }
+
+        }
+            
     }
 
     execButton(textButton) {
@@ -100,7 +173,7 @@ class CalcController {
                 console.log(this._operation);
                 break
             case 'ponto':
-                this.addOperator('.');
+                this.addDot();
                 console.log(this._operation);
                 break
             case '0':
@@ -113,7 +186,7 @@ class CalcController {
             case '7':
             case '8':
             case '9':
-                this.addOperator(parseInt(textButton));
+                this.addOperator(textButton);
                 console.log(this._operation);
                 break
             default:
@@ -147,11 +220,16 @@ class CalcController {
 
     getCalcResult() {
 
-        return eval(this._operation.join(''));
+        return eval(this._operation.join('')).toString()
 
     }
 
     calc() {
+
+        if (!this.getLastOperator()) {
+            console.log(this._operation);
+            return
+        };
 
         let lastOperator;
 
@@ -199,6 +277,8 @@ class CalcController {
 
     addOperator(value) {
 
+        console.log(isNaN(value));
+
         if (isNaN(this.getLastOperator())) {
             if (this.isOperator(value)) {
                 if (this.getLastOperator()) {
@@ -217,7 +297,7 @@ class CalcController {
                 console.log(value)
             } else {
                 let newValue = `${this.getLastOperator().toString()}${value.toString()}`;
-                this.replaceLastIndex(parseInt(newValue));
+                this.replaceLastIndex(newValue);
                 this.showLastNumberOnDisplay();
             }
         }
