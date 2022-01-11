@@ -142,39 +142,30 @@ class CalcController {
         switch (textButton) {
             case 'ac':
                 this.clearAll();
-                console.log(this._operation);
                 break
             case 'ce':
                 this.clearEntry();
-                console.log(this._operation);
                 break
             case 'soma':
                 this.addOperator('+');
-                console.log(this._operation);
                 break
             case 'subtracao':
                 this.addOperator('-');
-                console.log(this._operation);
                 break
             case 'multiplicacao':
                 this.addOperator('*');
-                console.log(this._operation);
                 break
             case 'divisao':
                 this.addOperator('/');
-                console.log(this._operation);
                 break
             case 'porcento':
                 this.addOperator('%');
-                console.log(this._operation);
                 break
             case 'igual':
                 this.calc();
-                console.log(this._operation);
                 break
             case 'ponto':
                 this.addDot();
-                console.log(this._operation);
                 break
             case '0':
             case '1':
@@ -187,7 +178,6 @@ class CalcController {
             case '8':
             case '9':
                 this.addOperator(textButton);
-                console.log(this._operation);
                 break
             default:
                 this.setError();
@@ -227,7 +217,6 @@ class CalcController {
     calc() {
 
         if (!this.getLastOperator()) {
-            console.log(this._operation);
             return
         };
 
